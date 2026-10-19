@@ -18,29 +18,33 @@ import com.example.paoabacus.ui.theme.*
 
 data class MathStep(val stepNumber: Int, val instruction: String)
 data class MathLesson(
-    val title: String, val problem: String, val rule: String, 
+    val title: String, val problem: String, val rule: String,
     val steps: List<MathStep>, val targetNumber: Int
 )
 
 val LESSONS = listOf(
-    MathLesson("Addition 1-4", "2 + 3", "Move earth beads UP to the bar.", listOf(
-        MathStep(1, "Slide 2 Earth beads UP on the Ones rod."),
-        MathStep(2, "Slide 3 more Earth beads UP."),
-        MathStep(3, "The result is 5.")
-    ), 5),
-    MathLesson("Adding 5", "5 + 5", "Move Heaven bead DOWN, clear Earth beads.", listOf(
-        MathStep(1, "Slide 1 Heaven bead DOWN. (Value: 5)"),
-        MathStep(2, "To add 5, you carry the 10."),
-        MathStep(3, "Move 1 Earth bead UP on the TENS rod.")
-    ), 10),
-    MathLesson("Borrowing", "8 + 6", "Small Friend / Borrow rule.", listOf(
-        MathStep(1, "Make 8: 1 Heaven DOWN, 3 Earth UP."),
-        MathStep(2, "To add 6, slide 2 Earth DOWN and 1 Earth UP on the Tens rod.")
-    ), 14),
-    MathLesson("Subtraction", "7 - 3", "Move earth beads DOWN.", listOf(
-        MathStep(1, "Make 7: 1 Heaven DOWN, 2 Earth UP."),
-        MathStep(2, "Move 3 Earth beads DOWN.")
-    ), 4)
+    MathLesson("Addition 1-4", "2 + 3", "Use the +5 Rule (Small Friend): Move Heaven DOWN and Earth DOWN.",
+        listOf(
+            MathStep(1, "Slide 2 Earth beads UP on the Ones rod. (Value: 2)"),
+            MathStep(2, "You need to add 3. Since you only have 2 Earth beads left (out of 4), you must use the Heaven bead."),
+            MathStep(3, "Slide 1 Heaven bead DOWN (value +5)."),
+            MathStep(4, "Slide 2 Earth beads DOWN (value -2). Because 5 - 2 = 3."),
+            MathStep(5, "Look at the board: 1 Heaven bead is DOWN, 0 Earth beads are UP. The result is 5.")
+        ), 5),
+    MathLesson("Adding 5", "5 + 5", "Use the +10 Rule: Move Heaven UP and carry 10 to the Tens rod.",
+        listOf(
+            MathStep(1, "Slide 1 Heaven bead DOWN on the Ones rod. (Value: 5)"),
+            MathStep(2, "You need to add 5, but there is no more Heaven bead to move."),
+            MathStep(3, "Slide the Heaven bead UP (value -5)."),
+            MathStep(4, "Slide 1 Earth bead UP on the Tens rod (value +10)."),
+            MathStep(5, "Result: Tens rod has 1 (10), Ones rod has 0. The answer is 10.")
+        ), 10),
+    MathLesson("Subtraction", "7 - 3", "Move Earth beads DOWN away from the bar.",
+        listOf(
+            MathStep(1, "Make 7: Slide 1 Heaven bead DOWN and 2 Earth beads UP. (Value: 7)"),
+            MathStep(2, "To subtract 3, slide 3 Earth beads DOWN."),
+            MathStep(3, "Look at the board: 1 Heaven bead is DOWN (5), 0 Earth beads are UP. The answer is 5.")
+        ), 4)
 )
 
 @Composable
@@ -89,12 +93,10 @@ fun MathTeacherScreen(onPracticeClick: () -> Unit) {
                     }
                 }
                 Spacer(Modifier.height(16.dp))
-                
-                // The Practice Button!
                 Button(
-                    onClick = { 
+                    onClick = {
                         PracticeState.targetValue = selectedLesson.targetNumber
-                        onPracticeClick() // Navigate to Abacus tab
+                        onPracticeClick()
                     },
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(containerColor = Green, contentColor = White)
