@@ -56,7 +56,7 @@ fun AbacusNavGraph() {
         NavHost(navController = navController, startDestination = Screen.Abacus.route, modifier = Modifier.padding(padding)) {
             composable(Screen.Abacus.route) { AbacusScreen() }
             composable(Screen.Flash.route) { FlashAnzanScreen() }
-            composable(Screen.Operations.route) { OperationsScreen() }
+            composable(Screen.Operations.route) { MathTeacherScreen() }
             composable(Screen.Rules.route) { RulesScreen() }
             composable(Screen.Timer.route) { TimerScreen() }
         }
