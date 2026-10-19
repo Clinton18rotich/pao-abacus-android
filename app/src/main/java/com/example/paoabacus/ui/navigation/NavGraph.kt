@@ -21,13 +21,12 @@ sealed class Screen(val route: String, val label: String, val icon: ImageVector)
     object Flash : Screen("flash", "Flash", Icons.Filled.Bolt)
     object Operations : Screen("operations", "Math", Icons.Filled.Functions)
     object Rules : Screen("rules", "Rules", Icons.Filled.MenuBook)
-    object Timer : Screen("timer", "Timer", Icons.Filled.Timer)
 }
 
 @Composable
 fun AbacusNavGraph() {
     val navController = rememberNavController()
-    val items = listOf(Screen.Abacus, Screen.Flash, Screen.Operations, Screen.Rules, Screen.Timer)
+    val items = listOf(Screen.Abacus, Screen.Flash, Screen.Operations, Screen.Rules)
 
     Scaffold(
         containerColor = DarkBg,
@@ -57,12 +56,9 @@ fun AbacusNavGraph() {
             composable(Screen.Abacus.route) { AbacusScreen() }
             composable(Screen.Flash.route) { FlashAnzanScreen() }
             composable(Screen.Operations.route) { 
-                MathTeacherScreen(onPracticeClick = { 
-                    navController.navigate(Screen.Abacus.route) 
-                }) 
+                MathTeacherScreen(onPracticeClick = { navController.navigate(Screen.Abacus.route) }) 
             }
             composable(Screen.Rules.route) { RulesScreen() }
-            composable(Screen.Timer.route) { TimerScreen() }
         }
     }
 }
