@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -20,15 +21,12 @@ import com.example.paoabacus.ui.theme.*
 
 @Composable
 fun AbacusScreen() {
-    // 13 rods, each with 5 beads (0 = heaven, 1-4 = earth)
     var rods by remember { mutableStateOf(List(13) { List(5) { false } }) }
     var displayValue by remember { mutableStateOf(0L) }
 
-    // Calculate value
     LaunchedEffect(rods) {
         var total = 0L
         var multiplier = 1L
-        // Process from right to left (ones to trillions)
         for (i in 12 downTo 0) {
             var rodValue = 0
             if (rods[i][0]) rodValue += 5
@@ -45,27 +43,28 @@ fun AbacusScreen() {
         Text("Value: $displayValue", color = Green, fontSize = 40.sp, fontWeight = FontWeight.Bold)
         Spacer(Modifier.height(16.dp))
 
-        // The 3D Wooden Frame
+        // Polished Wood Frame
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
-                .shadow(12.dp, shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp))
+                .shadow(16.dp, RoundedCornerShape(16.dp))
                 .background(
                     brush = Brush.verticalGradient(
-                        colors = listOf(Color(0xFF5D4037), Color(0xFF3E2723), Color(0xFF5D4037))
+                        colors = listOf(Color(0xFF6D4C41), Color(0xFF3E2723), Color(0xFF6D4C41))
                     ),
-                    shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)
+                    shape = RoundedCornerShape(16.dp)
                 )
                 .padding(horizontal = 4.dp, vertical = 16.dp)
         ) {
-            // The reckoning bar
+            // Reckoning Bar
             Box(
                 modifier = Modifier
                     .align(Alignment.Center)
                     .fillMaxWidth()
-                    .height(4.dp)
-                    .background(Color(0xFFBCAAA4))
+                    .height(6.dp)
+                    .background(Color(0xFFBCAAA4), RoundedCornerShape(3.dp))
+                    .shadow(2.dp)
             )
 
             Row(
@@ -89,10 +88,7 @@ fun AbacusScreen() {
         }
 
         Spacer(Modifier.height(16.dp))
-        Button(
-            onClick = { rods = List(13) { List(5) { false } } },
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF555555))
-        ) {
+        Button(onClick = { rods = List(13) { List(5) { false } } }, colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF555555))) {
             Text("Reset Abacus")
         }
     }
@@ -105,22 +101,11 @@ fun SorobanRod(rodState: List<Boolean>, onToggle: (Int) -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        // Heaven Bead (Top)
-        AnimatedBead(
-            isActive = rodState[0],
-            onClick = { onToggle(0) }
-        )
-
-        // Space for the reckoning bar
+        AnimatedBead(isActive = rodState[0], onClick = { onToggle(0) })
         Spacer(Modifier.height(32.dp))
-
-        // Earth Beads (Bottom)
         Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
             for (i in 1..4) {
-                AnimatedBead(
-                    isActive = rodState[i],
-                    onClick = { onToggle(i) }
-                )
+                AnimatedBead(isActive = rodState[i], onClick = { onToggle(i) })
             }
         }
     }
@@ -128,26 +113,24 @@ fun SorobanRod(rodState: List<Boolean>, onToggle: (Int) -> Unit) {
 
 @Composable
 fun AnimatedBead(isActive: Boolean, onClick: () -> Unit) {
-    // Animate the vertical position slightly to give a "slide" feel
     val offsetY by animateFloatAsState(
-        targetValue = if (isActive) 0f else 4f, // Small vertical shift
+        targetValue = if (isActive) 0f else 4f,
         animationSpec = spring(dampingRatio = 0.5f, stiffness = 300f),
         label = "bead"
     )
 
-    // The 3D bead visual (Bi-cone shape via gradient)
     Box(
         modifier = Modifier
             .padding(vertical = 2.dp)
             .offset(y = offsetY.dp)
             .size(width = 22.dp, height = 16.dp)
-            .shadow(if (isActive) 6.dp else 2.dp, shape = CircleShape)
+            .shadow(if (isActive) 6.dp else 2.dp, CircleShape)
             .background(
                 brush = Brush.verticalGradient(
                     colors = if (isActive) {
-                        listOf(Color(0xFFFFB300), Color(0xFFF57F17), Color(0xFFFFB300)) // Glowing Gold
+                        listOf(Color(0xFFFFD54F), Color(0xFFFF8F00), Color(0xFFFFD54F)) // Shiny Gold
                     } else {
-                        listOf(Color(0xFF8D6E63), Color(0xFF4E342E), Color(0xFF8D6E63)) // Dark Wood
+                        listOf(Color(0xFFA1887F), Color(0xFF4E342E), Color(0xFFA1887F)) // Polished Wood
                     }
                 ),
                 shape = CircleShape
